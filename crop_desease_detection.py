@@ -54,44 +54,65 @@ os.makedirs("results", exist_ok=True)
 
 def download_pdt_dataset():
     """
-    Download a sample of the PDT dataset from Hugging Face.
-    For the full dataset, you'll need to download it directly from:
-    https://huggingface.co/datasets/qwer0213/PDT_dataset
+    Download a sample of the PDT dataset and place it in the correct location for Ultralytics.
     """
-    # For demonstration, we'll use a small sample of the dataset
-    # In practice, you should download the full dataset
-    print("Downloading PDT dataset sample from Hugging Face...")
+    # The correct base directory for Ultralytics datasets
+    base_dir = "/content/datasets"
+    dataset_dir = os.path.join(base_dir, "PDT")
 
-    # This would be replaced with the actual dataset download
-    # For now, we'll create a placeholder for demonstration
-    os.makedirs("data/PDT", exist_ok=True)
-    os.makedirs("data/PDT/images/train", exist_ok=True)
-    os.makedirs("data/PDT/images/val", exist_ok=True)
-    os.makedirs("data/PDT/labels/train", exist_ok=True)
-    os.makedirs("data/PDT/labels/val", exist_ok=True)
+    # Create directories
+    for split in ["train", "val"]:
+        os.makedirs(os.path.join(dataset_dir, "images", split), exist_ok=True)
+        os.makedirs(os.path.join(dataset_dir, "labels", split), exist_ok=True)
 
-    print("Dataset downloaded successfully!")
-    return "data/PDT"
+    print("Creating placeholder data for demonstration...")
+
+    # Create placeholder images and labels
+    for split in ["train", "val"]:
+        num_images = 20 if split == "train" else 5
+        for i in range(num_images):
+            # Create a black image with a white rectangle as an "unhealthy" area
+            img = np.zeros((640, 640, 3), dtype=np.uint8)
+            x1, y1 = random.randint(100, 400), random.randint(100, 400)
+            x2, y2 = x1 + random.randint(50, 200), y1 + random.randint(50, 200)
+            cv2.rectangle(img, (x1, y1), (x2, y2), (255, 255, 255), -1)
+
+            # Save image
+            img_path = os.path.join(dataset_dir, "images", split, f"placeholder_{i}.jpg")
+            cv2.imwrite(img_path, img)
+
+            # Save label (YOLO format: class x_center y_center width height)
+            label_path = os.path.join(dataset_dir, "labels", split, f"placeholder_{i}.txt")
+
+            # Calculate YOLO format coordinates
+            img_width, img_height = 640, 640
+            x_center = (x1 + x2) / 2 / img_width
+            y_center = (y1 + y2) / 2 / img_height
+            width = (x2 - x1) / img_width
+            height = (y2 - y1) / img_height
+
+            with open(label_path, "w") as f:
+                f.write(f"0 {x_center:.6f} {y_center:.6f} {width:.6f} {height:.6f}")
+
+    print(f"Created placeholder data in {dataset_dir}")
+    return dataset_dir
 
 def prepare_data_config(dataset_path):
-    """Create YAML config file for YOLOv5-based training"""
+    """Create YAML config file for YOLO training"""
     data_yaml = {
-        'path': dataset_path,
-        'train': 'images/train',
-        'val': 'images/val',
+        'path': dataset_path,  # Use the absolute path
+        'train': 'images/train',  # Relative to path
+        'val': 'images/val',      # Relative to path
         'names': {0: 'unhealthy'},
         'nc': 1  # number of classes
     }
 
-    with open(f"{dataset_path}/data.yaml", 'w') as f:
+    config_path = os.path.join(dataset_path, "data.yaml")
+    with open(config_path, 'w') as f:
         yaml.dump(data_yaml, f)
 
-    print(f"Created data configuration at {dataset_path}/data.yaml")
-    return f"{dataset_path}/data.yaml"
-
-# Download and prepare dataset
-dataset_path = download_pdt_dataset()
-data_config = prepare_data_config(dataset_path)
+    print(f"Created data configuration at {config_path}")
+    return config_path
 
 """## 3. YOLO-DP Model Architecture"""
 
@@ -191,29 +212,32 @@ model = create_yolo_dp_model(pretrained=True)
 
 """## 4. Training Pipeline"""
 
-def train_model(model, data_config, epochs=300, batch_size=16, img_size=640):
-       """
-       Train the YOLO-DP model.
-       Using YOLOv5 training pipeline with custom configuration.
-       """
-       print(f"Starting training for {epochs} epochs...")
+def train_model(data_config, epochs=100, batch_size=16, img_size=640):
+    """
+    Train the YOLO-DP model.
+    Using YOLOv5 training pipeline with custom configuration.
+    """
+    print(f"Starting training for {epochs} epochs...")
 
-       # Update this line
-       !yolo train \
-           model=yolov5su.pt \
-           data={data_config} \
-           epochs={epochs} \
-           batch={batch_size} \
-           imgsz={img_size} \
-           patience=100 \
-           project=runs/train \
-           name=YOLO-DP \
-           exist_ok=True
+    # Use YOLOv5s as the base model (newer versions might allow yolov5su.pt)
+    !yolo train \
+        model=yolov5s.pt \
+        data={data_config} \
+        epochs={epochs} \
+        batch={batch_size} \
+        imgsz={img_size} \
+        patience=100 \
+        project=runs/train \
+        name=YOLO-DP \
+        exist_ok=True
 
-       print("Training completed!")
-       return "runs/train/YOLO-DP/weights/best.pt"
+    print("Training completed!")
+    return "runs/train/YOLO-DP/weights/best.pt"
 
-best_weights = train_model(model, data_config, epochs=300, batch_size=16)
+# Run the pipeline
+dataset_path = download_pdt_dataset()
+data_config = prepare_data_config(dataset_path)
+best_weights = train_model(data_config, epochs=10)
 
 """## 5. Evaluation"""
 
@@ -233,7 +257,7 @@ def evaluate_model(model_path, data_config, batch_size=16, img_size=640):
 
     print("Evaluation completed!")
 
-# evaluate_model(best_weights, data_config)
+evaluate_model(best_weights, data_config)
 
 """## 6. Visualization and Inference"""
 
@@ -256,23 +280,64 @@ def visualize_predictions(model_path, img_path, conf_threshold=0.25):
 
     return results
 
-def inference_on_folder(model_path, folder_path, conf_threshold=0.25):
-    """Run inference on all images in a folder."""
-    # Load model
-    model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path)
-    model.conf = conf_threshold
+def inference_on_folder(weights_path, folder_path, conf_threshold=0.25, save_dir="results"):
+    """
+    Run inference on all images in a specified folder.
 
-    # Run inference
-    results = model(folder_path)
+    Args:
+        weights_path: Path to the trained model weights
+        folder_path: Path to the folder containing images to run inference on
+        conf_threshold: Confidence threshold for detections (0-1)
+        save_dir: Directory to save results
 
-    # Save results
-    results.save(save_dir="results")
-    print(f"Saved all predictions to results/")
+    Returns:
+        output_path: Path to the saved results
+    """
+    # Check if weights exist
+    if not os.path.exists(weights_path):
+        print(f"Error: Weights file not found at {weights_path}")
+        return None
 
-    return results
+    # Check if folder exists
+    if not os.path.exists(folder_path):
+        print(f"Error: Folder not found at {folder_path}")
+        return None
 
-# visualize_predictions(best_weights, "path/to/test/image.jpg")
-# inference_on_folder(best_weights, "path/to/test/folder")
+    print(f"Running inference on folder: {folder_path}")
+    print(f"Using model weights: {weights_path}")
+    print(f"Confidence threshold: {conf_threshold}")
+
+    # Create output directory
+    os.makedirs(save_dir, exist_ok=True)
+
+    # Run inference using YOLO command
+    output_path = os.path.join(save_dir, "pdt_predictions")
+
+    # Use Ultralytics YOLO for inference
+    !yolo predict model={weights_path} source={folder_path} conf={conf_threshold} project={save_dir} name=pdt_predictions save=True
+
+    print(f"Inference complete! Results saved to {output_path}")
+
+    # Count the number of prediction images
+    try:
+        num_predictions = len(list(Path(output_path).glob("*.jpg")))
+        print(f"Generated {num_predictions} prediction images")
+    except Exception as e:
+        print(f"Could not count prediction images: {e}")
+
+    return output_path
+
+# Path to your trained weights
+best_weights = "runs/train/YOLO-DP/weights/best.pt"
+
+# Path to folder with images for inference
+test_folder = "path/to/test/folder"  # Replace with your actual test folder path
+
+# Run inference
+results_path = inference_on_folder(best_weights, test_folder, conf_threshold=0.25)
+
+# Print results path
+print(f"Inference results saved to: {results_path}")
 
 """## 7. Comparison with Other Models"""
 
