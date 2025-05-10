@@ -1,34 +1,31 @@
+import json
 import nbformat
-from nbconvert.preprocessors import ClearOutputPreprocessor
 
-def create_github_friendly_notebook(input_path, output_path):
+def clean_notebook(notebook_path):
     # Read the notebook
-    with open(input_path, 'r', encoding='utf-8') as f:
+    with open(notebook_path, 'r', encoding='utf-8') as f:
         nb = nbformat.read(f, as_version=4)
     
-    # Clear outputs
-    cop = ClearOutputPreprocessor()
-    nb, _ = cop.preprocess(nb, {})
-    
-    # Remove all widget metadata
+    # Remove widget metadata from each cell
     for cell in nb.cells:
-        if hasattr(cell, 'metadata'):
-            if 'widgets' in cell.metadata:
-                del cell.metadata['widgets']
-            # Also remove other problematic metadata
-            if 'execution' in cell.metadata:
-                del cell.metadata['execution']
+        if 'metadata' in cell and 'widgets' in cell.metadata:
+            # Either remove widgets entirely
+            del cell.metadata['widgets']
+            # Or add state if you want to keep widgets
+            # cell.metadata['widgets']['state'] = {}
     
-    # Clean notebook metadata
-    if 'widgets' in nb.metadata:
+    # Also check notebook-level metadata
+    if 'metadata' in nb and 'widgets' in nb.metadata:
+        # Either remove widgets entirely
         del nb.metadata['widgets']
+        # Or add state if you want to keep widgets
+        # nb.metadata['widgets']['state'] = {}
     
     # Save the cleaned notebook
-    with open(output_path, 'w', encoding='utf-8') as f:
+    with open(notebook_path, 'w', encoding='utf-8') as f:
         nbformat.write(nb, f)
+    
+    print(f"Cleaned notebook saved to {notebook_path}")
 
-# Create a GitHub-friendly version
-create_github_friendly_notebook(
-    'crop_desease_detection.ipynb', 
-    'crop_desease_detection_github.ipynb'
-)
+# Clean your notebook
+clean_notebook('crop_desease_detection.ipynb')
