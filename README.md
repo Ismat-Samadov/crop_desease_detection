@@ -269,7 +269,7 @@ If you use this model in your research, please cite:
 
 ## 📞 Contact
 
-Ismat Samadov - [GitHub](https://github.com/Ismat-Samadov) - [LinkedIn](https://www.linkedin.com/in/ismatsamadov/)
+Ismat Samadov - [GitHub](https://github.com/Ismat-Samadov)
 
 Project Link: [https://github.com/Ismat-Samadov/crop_desease_detection](https://github.com/Ismat-Samadov/crop_desease_detection)
 
