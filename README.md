@@ -168,6 +168,75 @@ The model achieved excellent performance on the validation set:
 
 View training results and performance metrics on our [Hugging Face Model Card](https://huggingface.co/IsmatS/crop_desease_detection).
 
+## 📊 Understanding Training Metrics
+
+### Overall Performance
+
+Your model achieved excellent results:
+- **93.3% mAP50** - Primary accuracy metric for object detection
+- **65.9% mAP50-95** - Stricter accuracy measure using multiple IoU thresholds
+- **87.8% Precision** - When detecting a diseased tree, the model is correct 87.8% of the time
+- **86.3% Recall** - The model finds 86.3% of all diseased trees in images
+- **Training Time**: 24.5 minutes on NVIDIA A100-40GB GPU
+
+### Training Progress Analysis
+
+#### Loss Metrics Breakdown
+
+The training process tracked three types of losses that decreased over 50 epochs:
+
+1. **Box Loss (box_loss)**: 3.371 → 1.117
+   - Measures bounding box coordinate prediction accuracy
+   - Lower values indicate better localization of diseased trees
+
+2. **Classification Loss (cls_loss)**: 2.346 → 0.6453
+   - Measures object classification accuracy
+   - Significant reduction shows improved disease identification
+
+3. **DFL Loss (Distribution Focal Loss)**: 2.348 → 1.072
+   - Helps with precise bounding box regression
+   - Steady decrease indicates better boundary detection
+
+#### Evaluation Metrics Evolution
+
+- **mAP50**: Improved from 28.8% (epoch 1) to 93.3% (final)
+  - Mean Average Precision at 50% IoU threshold
+  - Primary accuracy metric for object detection
+
+- **mAP50-95**: Rose from 12% to 65.9%
+  - Average mAP for IoU thresholds from 50% to 95%
+  - More stringent metric; 65.9% is excellent
+
+- **Precision**: Reached 87.8%
+  - True positives / (True positives + False positives)
+  - Low false positive rate
+
+- **Recall**: Achieved 86.3%
+  - True positives / (True positives + False negatives)
+  - Finds most diseased trees in images
+
+### Training Characteristics
+
+1. **Fast Initial Learning**: Major improvements in first 10 epochs
+2. **Stable Plateau**: Performance stabilized around epochs 20-30
+3. **Fine-tuning Phase**: Gradual improvements in final epochs
+4. **No Overfitting**: Validation metrics continued improving throughout
+
+### Model Efficiency
+
+- **Inference Speed**: ~7ms per image on GPU
+- **Model Size**: 11.1M parameters (lightweight)
+- **Batch Processing**: 16 images per batch at 640x640 resolution
+
+### Dataset Insights
+
+The model was trained on:
+- **Training**: 4,536 images (3,206 with diseased trees, 1,330 healthy backgrounds)
+- **Validation**: 567 images (399 with diseased trees, 168 backgrounds)
+- **Test**: 567 images (390 with diseased trees, 177 backgrounds)
+
+Background images help the model learn to distinguish healthy from diseased trees, reducing false positives.
+
 ## 🔧 Advanced Usage
 
 ### Custom Inference Settings
