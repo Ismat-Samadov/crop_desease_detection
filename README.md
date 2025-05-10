@@ -279,4 +279,3 @@ Project Link: [https://github.com/Ismat-Samadov/crop_desease_detection](https://
 - 🚀 **Demo**: [https://huggingface.co/spaces/IsmatS/tree-disease-detector-demo](https://huggingface.co/spaces/IsmatS/tree-disease-detector-demo)
 - 💻 **GitHub**: [https://github.com/Ismat-Samadov/crop_desease_detection](https://github.com/Ismat-Samadov/crop_desease_detection)
 - 📊 **Dataset**: [https://huggingface.co/datasets/qwer0213/PDT_dataset](https://huggingface.co/datasets/qwer0213/PDT_dataset)
-- 📓 **Colab**: [Open in Google Colab](https://colab.research.google.com/github/Ismat-Samadov/crop_desease_detection/blob/main/crop_desease_detection.ipynb)
