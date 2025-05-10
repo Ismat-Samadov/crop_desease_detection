@@ -280,9 +280,3 @@ Project Link: [https://github.com/Ismat-Samadov/crop_desease_detection](https://
 - 💻 **GitHub**: [https://github.com/Ismat-Samadov/crop_desease_detection](https://github.com/Ismat-Samadov/crop_desease_detection)
 - 📊 **Dataset**: [https://huggingface.co/datasets/qwer0213/PDT_dataset](https://huggingface.co/datasets/qwer0213/PDT_dataset)
 - 📓 **Colab**: [Open in Google Colab](https://colab.research.google.com/github/Ismat-Samadov/crop_desease_detection/blob/main/crop_desease_detection.ipynb)
-
----
-
-<div align="center">
-  Made with ❤️ by <a href="https://github.com/Ismat-Samadov">Ismat Samadov</a>
-</div>
