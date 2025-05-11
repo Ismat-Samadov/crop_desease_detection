@@ -42,7 +42,6 @@ Experience the model in action with our interactive demo:
 Here are some example detections from the model showing unhealthy tree identification:
 
 <div align="center">
-<img src="pred_1.png" width="45%" alt="Detection Example 1">
 <img src="pred_2.png" width="45%" alt="Detection Example 2">
 </div>
 
