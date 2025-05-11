@@ -37,6 +37,27 @@ Experience the model in action with our interactive demo:
 | Training Time | 24.5 minutes |
 | Device | NVIDIA A100-SXM4-40GB |
 
+## 🔍 Detection Examples
+
+Here are some example detections from the model showing unhealthy tree identification:
+
+<div align="center">
+<img src="pred_1.png" width="45%" alt="Detection Example 1">
+<img src="pred_2.png" width="45%" alt="Detection Example 2">
+</div>
+
+<div align="center">
+<img src="pred_3.png" width="45%" alt="Detection Example 3">
+<img src="pred_4.png" width="45%" alt="Detection Example 4">
+</div>
+
+<div align="center">
+<img src="pred_5.png" width="45%" alt="Detection Example 5">
+<img src="pred_6.png" width="45%" alt="Detection Example 6">
+</div>
+
+The model successfully identifies unhealthy trees in various aerial imagery conditions, with confidence scores ranging from 0.32 to 0.86. These examples demonstrate the model's ability to detect multiple diseased trees in a single image with accurate bounding boxes.
+
 ## 🌟 Features
 
 - High-accuracy detection of unhealthy trees in aerial imagery
@@ -52,7 +73,12 @@ crop_desease_detection/
 ├── crop_desease_detection.ipynb  # Main training notebook
 ├── crop_desease_detection.py     # Python implementation
 ├── training_results.png          # Model performance visualization
-├── research.txt                  # Dataset research and references
+├── pred_1.png                    # Example detection 1
+├── pred_2.png                    # Example detection 2
+├── pred_3.png                    # Example detection 3
+├── pred_4.png                    # Example detection 4
+├── pred_5.png                    # Example detection 5
+├── pred_6.png                    # Example detection 6
 ├── LICENSE                       # MIT License
 └── README.md                     # This file
 ```
