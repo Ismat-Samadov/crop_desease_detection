@@ -361,10 +361,6 @@ If you use this model in your research, please cite:
 }
 ```
 
-## 📞 Contact
-
-Ismat Samadov - [Website](https://ismat.pro/)
-
 ## 🔗 Important Links
 
 - 🤗 **Model**: [https://huggingface.co/IsmatS/crop_desease_detection](https://huggingface.co/IsmatS/crop_desease_detection)
