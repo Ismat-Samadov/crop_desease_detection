@@ -526,12 +526,6 @@ If you use this model in your research, please cite:
 }
 ```
 
-## 📞 Contact
-
-Ismat Samadov - [GitHub](https://github.com/Ismat-Samadov)
-
-Project Link: [https://github.com/Ismat-Samadov/crop_desease_detection](https://github.com/Ismat-Samadov/crop_desease_detection)
-
 ## 🔗 Important Links
 
 - 🤗 **Model**: [https://huggingface.co/IsmatS/crop_desease_detection](https://huggingface.co/IsmatS/crop_desease_detection)
