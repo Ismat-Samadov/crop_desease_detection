@@ -532,3 +532,5 @@ If you use this model in your research, please cite:
 - 🚀 **Demo**: [https://huggingface.co/spaces/IsmatS/tree-disease-detector-demo](https://huggingface.co/spaces/IsmatS/tree-disease-detector-demo)
 - 💻 **GitHub**: [https://github.com/Ismat-Samadov/crop_desease_detection](https://github.com/Ismat-Samadov/crop_desease_detection)
 - 📊 **Dataset**: [https://huggingface.co/datasets/qwer0213/PDT_dataset](https://huggingface.co/datasets/qwer0213/PDT_dataset)
+- 🪿 **Notebook**: [https://www.kaggle.com/code/ismetsemedov/crop-desease-detection](https://www.kaggle.com/code/ismetsemedov/crop-desease-detection)
+
