@@ -8,7 +8,110 @@
 
 A deep learning project for detecting unhealthy/diseased trees in aerial UAV imagery using YOLOv8s architecture. This model achieves 93.3% mAP50 on the PDT (Pests and Diseases Tree) dataset.
 
-![Training Results](training_results.png)
+![Training Results](static/training_results.png)
+
+## 🎓 Project Overview
+
+This university project demonstrates a complete machine learning pipeline for computer vision-based tree disease detection. The system uses state-of-the-art YOLO architecture to identify unhealthy trees in aerial imagery, which has practical applications in forest management and precision agriculture.
+
+## 🏗️ System Architecture
+
+```mermaid
+graph TD
+    A[PDT Dataset<br/>HuggingFace Hub] --> B[Data Download<br/>& Extraction]
+    B --> C[Dataset Processing<br/>YOLO Format]
+    C --> D[Model Training<br/>YOLOv8s]
+    D --> E[Model Evaluation<br/>mAP, Precision, Recall]
+    E --> F[Model Export<br/>best.pt]
+    F --> G[Deployment<br/>HuggingFace Hub]
+    G --> H[Web Interface<br/>Gradio Demo]
+    
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style D fill:#bbf,stroke:#333,stroke-width:2px
+    style H fill:#bfb,stroke:#333,stroke-width:2px
+```
+
+## 📊 Training Pipeline
+
+```mermaid
+graph LR
+    A[Raw Dataset] --> B[Data Preprocessing]
+    B --> C[Train/Val/Test Split]
+    C --> D[Data Augmentation]
+    D --> E[Model Training]
+    E --> F[Validation]
+    F --> G{Performance<br/>Acceptable?}
+    G -->|No| H[Hyperparameter<br/>Tuning]
+    H --> E
+    G -->|Yes| I[Final Model]
+    
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style E fill:#bbf,stroke:#333,stroke-width:2px
+    style I fill:#bfb,stroke:#333,stroke-width:2px
+```
+
+## 🔄 Data Processing Workflow
+
+```mermaid
+flowchart TD
+    A[HuggingFace Dataset] --> B[Download ZIP]
+    B --> C[Extract Dataset]
+    C --> D{Find YOLO_txt<br/>Directory}
+    D --> E[Train Split<br/>4,536 images]
+    D --> F[Validation Split<br/>567 images]
+    D --> G[Test Split<br/>567 images]
+    E --> H[Copy Images & Labels]
+    F --> H
+    G --> H
+    H --> I[Create data.yaml]
+    I --> J[YOLO-Ready Dataset]
+    
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style J fill:#bfb,stroke:#333,stroke-width:2px
+```
+
+## 🤖 Model Architecture
+
+```mermaid
+graph TD
+    A[Input Image<br/>640x640] --> B[Backbone<br/>CSPDarknet]
+    B --> C[Neck<br/>PANet]
+    C --> D[Detection Head]
+    D --> E[Bounding Boxes]
+    D --> F[Class Scores]
+    D --> G[Confidence Scores]
+    E --> H[NMS<br/>Post-processing]
+    F --> H
+    G --> H
+    H --> I[Final Detections<br/>Unhealthy Trees]
+    
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style B fill:#bbf,stroke:#333,stroke-width:2px
+    style I fill:#bfb,stroke:#333,stroke-width:2px
+```
+
+## 📈 Training Process
+
+```mermaid
+graph TD
+    A[Initialize YOLOv8s] --> B[Load Dataset]
+    B --> C[Configure Training<br/>50 epochs, batch=16]
+    C --> D[Train Model<br/>SGD Optimizer]
+    D --> E[Monitor Losses<br/>Box, Class, DFL]
+    E --> F[Validation<br/>Every Epoch]
+    F --> G[Save Best Model<br/>best.pt]
+    G --> H[Final Evaluation<br/>Test Set]
+    
+    subgraph Training Loop
+        D --> E
+        E --> F
+        F --> D
+    end
+    
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style D fill:#bbf,stroke:#333,stroke-width:2px
+    style H fill:#bfb,stroke:#333,stroke-width:2px
+```
 
 ## 🚀 Quick Links
 
@@ -42,17 +145,17 @@ Experience the model in action with our interactive demo:
 Here are some example detections from the model showing unhealthy tree identification:
 
 <div align="center">
-<img src="pred_2.png" width="45%" alt="Detection Example 2">
+<img src="static/pred_2.png" width="45%" alt="Detection Example 2">
+<img src="static/pred_3.png" width="45%" alt="Detection Example 3">
 </div>
 
 <div align="center">
-<img src="pred_3.png" width="45%" alt="Detection Example 3">
-<img src="pred_4.png" width="45%" alt="Detection Example 4">
+<img src="static/pred_4.png" width="45%" alt="Detection Example 4">
+<img src="static/pred_5.png" width="45%" alt="Detection Example 5">
 </div>
 
 <div align="center">
-<img src="pred_5.png" width="45%" alt="Detection Example 5">
-<img src="pred_6.png" width="45%" alt="Detection Example 6">
+<img src="static/pred_6.png" width="45%" alt="Detection Example 6">
 </div>
 
 The model successfully identifies unhealthy trees in various aerial imagery conditions, with confidence scores ranging from 0.32 to 0.86. These examples demonstrate the model's ability to detect multiple diseased trees in a single image with accurate bounding boxes.
@@ -71,15 +174,15 @@ The model successfully identifies unhealthy trees in various aerial imagery cond
 crop_desease_detection/
 ├── crop_desease_detection.ipynb  # Main training notebook
 ├── crop_desease_detection.py     # Python implementation
-├── training_results.png          # Model performance visualization
-├── pred_1.png                    # Example detection 1
-├── pred_2.png                    # Example detection 2
-├── pred_3.png                    # Example detection 3
-├── pred_4.png                    # Example detection 4
-├── pred_5.png                    # Example detection 5
-├── pred_6.png                    # Example detection 6
 ├── LICENSE                       # MIT License
-└── README.md                     # This file
+├── README.md                     # This file
+└── static/                       # Static assets
+    ├── training_results.png      # Model performance visualization
+    ├── pred_2.png               # Example detection 2
+    ├── pred_3.png               # Example detection 3
+    ├── pred_4.png               # Example detection 4
+    ├── pred_5.png               # Example detection 5
+    └── pred_6.png               # Example detection 6
 ```
 
 ## 🚀 Quick Start
@@ -127,21 +230,29 @@ For a user-friendly interface, visit our [Hugging Face Space](https://huggingfac
 - Visualize results instantly
 - Download annotated images
 
-### Training from Scratch
+### 📋 Step-by-Step Training Process
 
-1. Clone the repository:
-```bash
-git clone https://github.com/Ismat-Samadov/crop_desease_detection.git
-cd crop_desease_detection
+Based on our training notebook, here's the complete pipeline:
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Colab
+    participant HuggingFace
+    participant Model
+    
+    User->>Colab: Start Training Notebook
+    Colab->>HuggingFace: Download PDT Dataset
+    HuggingFace-->>Colab: 5.6GB Dataset (ZIP)
+    Colab->>Colab: Extract & Process Dataset
+    Colab->>Colab: Setup YOLO Format
+    Colab->>Model: Initialize YOLOv8s
+    Colab->>Model: Train for 50 Epochs
+    Model-->>Colab: Training Metrics
+    Colab->>Colab: Evaluate Performance
+    Colab->>HuggingFace: Upload Trained Model
+    User->>HuggingFace: Access Model & Demo
 ```
-
-2. Run the training notebook:
-```bash
-jupyter notebook crop_desease_detection.ipynb
-```
-
-Or use Google Colab:
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Ismat-Samadov/crop_desease_detection/blob/main/crop_desease_detection.ipynb)
 
 ## 📊 Dataset
 
@@ -203,6 +314,20 @@ Your model achieved excellent results:
 - **87.8% Precision** - When detecting a diseased tree, the model is correct 87.8% of the time
 - **86.3% Recall** - The model finds 86.3% of all diseased trees in images
 - **Training Time**: 24.5 minutes on NVIDIA A100-40GB GPU
+
+### Loss Function Evolution
+
+```mermaid
+graph LR
+    A[Epoch 1<br/>Box Loss: 3.371<br/>Cls Loss: 2.346<br/>DFL Loss: 2.348] --> B[Epoch 10<br/>Box Loss: 1.8<br/>Cls Loss: 1.2<br/>DFL Loss: 1.5]
+    B --> C[Epoch 25<br/>Box Loss: 1.3<br/>Cls Loss: 0.8<br/>DFL Loss: 1.2]
+    C --> D[Epoch 50<br/>Box Loss: 1.117<br/>Cls Loss: 0.645<br/>DFL Loss: 1.072]
+    
+    style A fill:#f99,stroke:#333,stroke-width:2px
+    style B fill:#ff9,stroke:#333,stroke-width:2px
+    style C fill:#9f9,stroke:#333,stroke-width:2px
+    style D fill:#9ff,stroke:#333,stroke-width:2px
+```
 
 ### Training Progress Analysis
 
@@ -318,6 +443,46 @@ output = query("your_image.jpg")
 - **Environmental Monitoring**: Tracking disease spread patterns
 - **Research**: Studying tree disease progression
 
+## 🔬 Technical Implementation Details
+
+### Data Pipeline Implementation
+
+```mermaid
+graph TD
+    A[snapshot_download] --> B[ZIP Extraction]
+    B --> C[Directory Structure<br/>Exploration]
+    C --> D[YOLO Format<br/>Conversion]
+    D --> E[data.yaml Creation]
+    E --> F[Model Training]
+    
+    subgraph Dataset Processing
+        C --> G[Train: 4,536 imgs]
+        C --> H[Val: 567 imgs]
+        C --> I[Test: 567 imgs]
+        G --> D
+        H --> D
+        I --> D
+    end
+    
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style F fill:#bbf,stroke:#333,stroke-width:2px
+```
+
+### Model Deployment Pipeline
+
+```mermaid
+graph LR
+    A[Trained Model<br/>best.pt] --> B[Model Export]
+    B --> C[HuggingFace Hub<br/>Upload]
+    C --> D[Model Card<br/>Creation]
+    D --> E[Gradio Interface]
+    E --> F[HuggingFace Spaces<br/>Deployment]
+    
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style C fill:#bbf,stroke:#333,stroke-width:2px
+    style F fill:#bfb,stroke:#333,stroke-width:2px
+```
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
@@ -360,6 +525,12 @@ If you use this model in your research, please cite:
   year={2024}
 }
 ```
+
+## 📞 Contact
+
+Ismat Samadov - [GitHub](https://github.com/Ismat-Samadov)
+
+Project Link: [https://github.com/Ismat-Samadov/crop_desease_detection](https://github.com/Ismat-Samadov/crop_desease_detection)
 
 ## 🔗 Important Links
 
