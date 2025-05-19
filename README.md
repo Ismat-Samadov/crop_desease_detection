@@ -70,6 +70,92 @@ flowchart TD
     style J fill:#bfb,stroke:#333,stroke-width:2px
 ```
 
+## 🔍 YOLOv8 Default Preprocessing Pipeline
+
+```mermaid
+flowchart TD
+    A[Input Images] --> B[Format Filtering<br/>JPG, JPEG, PNG]
+    B --> C[Resizing<br/>640×640 pixels]
+    C --> D[Normalization<br/>0-1 Range, RGB Conversion]
+    
+    D --> E{YOLOv8 Default<br/>Augmentation Pipeline}
+    
+    E --> F[Image Transforms]
+    F --> F1[Horizontal Flip<br/>p=0.5]
+    F --> F2[Random Scaling<br/>±50%]
+    F --> F3[Random Translation<br/>±10%]
+    F --> F4[Random Erasing<br/>p=0.4]
+    
+    E --> G[Color Adjustments]
+    G --> G1[HSV Hue<br/>±1.5%]
+    G --> G2[HSV Saturation<br/>±70%]
+    G --> G3[HSV Value<br/>±40%]
+    
+    E --> H[Advanced Augmentation]
+    H --> H1[Mosaic<br/>4-image composite]
+    H --> H2[Copy-Paste<br/>with flip mode]
+    
+    E --> I[Albumentations<br/>p=0.01 each]
+    I --> I1[Blur<br/>kernel 3-7]
+    I --> I2[MedianBlur<br/>kernel 3-7] 
+    I --> I3[ToGray<br/>weighted RGB] 
+    I --> I4[CLAHE<br/>clip limit 1.0-4.0]
+    
+    H1 --> J[Mosaic Deactivation<br/>at epoch 41]
+    
+    F1 --> K[Cache Generation]
+    F2 --> K
+    F3 --> K
+    F4 --> K
+    G1 --> K
+    G2 --> K
+    G3 --> K
+    H2 --> K
+    J --> K
+    I1 --> K
+    I2 --> K
+    I3 --> K
+    I4 --> K
+    
+    K --> L[Training Ready<br/>Augmented Images]
+    
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style E fill:#bbf,stroke:#333,stroke-width:2px
+    style L fill:#bfb,stroke:#333,stroke-width:2px
+```
+
+The model automatically applies YOLOv8's sophisticated preprocessing pipeline without explicit coding. These preprocessing stages significantly contribute to the model's robustness and accuracy:
+
+### Basic Processing
+- **Format Filtering**: Only JPG, JPEG, and PNG images are processed
+- **Resizing**: All images standardized to 640×640 pixels
+- **Normalization**: Pixel values normalized to [0-1] range
+- **Color Space**: BGR to RGB conversion
+
+### YOLOv8 Default Augmentations
+- **Geometric Transforms**:
+  - Horizontal flipping (50% probability)
+  - Random scaling (±50% variation)
+  - Random translation (±10% of image size)
+  - Random erasing (40% probability)
+
+- **Color Adjustments**:
+  - Hue variation: ±1.5%
+  - Saturation variation: ±70%
+  - Brightness variation: ±40%
+
+- **Advanced Augmentation**:
+  - Mosaic: Combines 4 training images (until epoch 40)
+  - Mosaic deactivation: Turned off for final 10 epochs
+
+- **Albumentations Library** (1% probability each):
+  - Blur: Random Gaussian blur (kernel 3-7)
+  - MedianBlur: Salt and pepper noise reduction (kernel 3-7)
+  - ToGray: Grayscale conversion with weighted average
+  - CLAHE: Contrast Limited Adaptive Histogram Equalization (8×8 tile grid)
+
+These preprocessing techniques work together to create a robust training dataset that helps the model generalize well to different lighting conditions, perspectives, and image qualities encountered in real-world UAV imagery.
+
 ## 🤖 Model Architecture
 
 ```mermaid
@@ -533,4 +619,3 @@ If you use this model in your research, please cite:
 - 💻 **GitHub**: [https://github.com/Ismat-Samadov/crop_desease_detection](https://github.com/Ismat-Samadov/crop_desease_detection)
 - 📊 **Dataset**: [https://huggingface.co/datasets/qwer0213/PDT_dataset](https://huggingface.co/datasets/qwer0213/PDT_dataset)
 - 🪿 **Notebook**: [https://www.kaggle.com/code/ismetsemedov/crop-desease-detection](https://www.kaggle.com/code/ismetsemedov/crop-desease-detection)
-
